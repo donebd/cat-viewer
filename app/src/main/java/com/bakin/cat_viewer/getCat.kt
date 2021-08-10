@@ -4,6 +4,7 @@ import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.lang.IndexOutOfBoundsException
 import java.net.URI
 import java.net.HttpURLConnection
 import java.net.URL
@@ -19,8 +20,8 @@ object Cat {
             connection =
                 URL("https://api.thecatapi.com/v1/images/search").openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
-            connection.connectTimeout = 5000
-            connection.readTimeout = 5000
+            connection.connectTimeout = 2500
+            connection.readTimeout = 2500
             connection.connect()
             if (connection.responseCode == 200) {
                 val input = BufferedInputStream(connection.inputStream)
@@ -36,8 +37,14 @@ object Cat {
     }
 
     fun getUrl(): String {
-        fun String.parsed(): String = this.split("\"")[9] ?: "error"
+        fun String.parsed(): String {
+            val list = this.split("\"")
+            return try {list[list.size - 6]} catch (e: IndexOutOfBoundsException) {"error"}
+        }
+        fun String.parssed(): List<String> = this.split("\"")
         val content = getJson()
+        println(content)
+        println(content.parssed())
         println(content.parsed())
         return if (content == "error") catErrorUrl
         else content.parsed()
