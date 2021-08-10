@@ -7,13 +7,16 @@ import android.widget.ImageView
 import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var catView : ImageView
+    lateinit var getCatButton : Button
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val catView : ImageView = findViewById(R.id.image)
-        val getCatButton : Button = findViewById(R.id.getCatButton)
+        catView  = findViewById(R.id.image)
+        getCatButton = findViewById(R.id.getCatButton)
 
         getCatButton.setOnClickListener {
             Thread {
@@ -24,4 +27,5 @@ class MainActivity : AppCompatActivity() {
             }.start()
         }
     }
+
 }
