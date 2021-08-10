@@ -38,13 +38,15 @@ object Cat {
     }
 
     fun getUrl(): String {
+
         fun String.parsed(): String {
             val list = this.split("\"")
             return try {list[list.size - 6]} catch (e: IndexOutOfBoundsException) {"error"}
         }
-        fun String.parssed(): List<String> = this.split("\"")
+
         val content = getJson()
         Log.d("TAG",content.parsed())
+
         return if (content == "error") catErrorUrl
         else content.parsed()
     }
