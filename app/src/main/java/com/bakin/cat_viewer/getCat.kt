@@ -1,5 +1,6 @@
 package com.bakin.cat_viewer
 
+import android.util.Log
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.IOException
@@ -29,7 +30,7 @@ object Cat {
                 return reader.readText()
             }
         } catch (e: IOException) {
-            println("Bad request")
+            Log.e("TAG","Bad request")
         } finally {
             connection?.disconnect()
         }
@@ -43,9 +44,7 @@ object Cat {
         }
         fun String.parssed(): List<String> = this.split("\"")
         val content = getJson()
-        println(content)
-        println(content.parssed())
-        println(content.parsed())
+        Log.d("TAG",content.parsed())
         return if (content == "error") catErrorUrl
         else content.parsed()
     }
