@@ -16,14 +16,12 @@ class MainActivity : AppCompatActivity() {
         val getCatButton : Button = findViewById(R.id.getCatButton)
 
         getCatButton.setOnClickListener {
-            val thr = Thread {
+            Thread {
                 val url = Cat.getUrl()
                     runOnUiThread {
                         Picasso.get().load(url).resize(1080,720).into(catView);
                     }
-
-            }
-            thr.start()
+            }.start()
         }
     }
 }
