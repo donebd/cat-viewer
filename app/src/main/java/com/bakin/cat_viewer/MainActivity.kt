@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
 
         getCatButton.setOnClickListener {
+            if (!hasInternet(this)) {
+                Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             it.isClickable = false
             Thread {
                 val url = Cat.getUrl()
@@ -64,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         catView.setOnClickListener {
             val scale = if (!isImageScaled) 1.4f else 1f
-            it.animate().scaleX(scale).scaleY(scale).setDuration(500)
+            it.animate().scaleX(scale).scaleY(scale).duration = 500
             isImageScaled = !isImageScaled
         }
 
