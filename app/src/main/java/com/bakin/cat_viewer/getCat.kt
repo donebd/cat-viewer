@@ -13,7 +13,7 @@ import java.net.URL
 
 object Cat {
 
-    val catErrorUrl = "https://im0-tub-ru.yandex.net/i?id=51c92e4e9b4e2f09e23e6aa1cab293ad&n=13"
+    private const val CAT_ERROR_URL = "https://im0-tub-ru.yandex.net/i?id=51c92e4e9b4e2f09e23e6aa1cab293ad&n=13"
 
     private fun getJson(): String {
         var connection: HttpURLConnection? = null
@@ -47,7 +47,7 @@ object Cat {
         val content = getJson().parsed()
         Log.d("TAG",content)
 
-        return if (content == "error") catErrorUrl
+        return if (content == "error") CAT_ERROR_URL
         else content
     }
 }
