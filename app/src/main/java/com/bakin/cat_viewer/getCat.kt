@@ -30,7 +30,7 @@ object Cat {
                 return reader.readText()
             }
         } catch (e: IOException) {
-            Log.e("TAG","Bad request")
+            Log.e("TAG","Bad request : $e")
         } finally {
             connection?.disconnect()
         }
@@ -44,10 +44,10 @@ object Cat {
             return try {list[list.size - 6]} catch (e: IndexOutOfBoundsException) {"error"}
         }
 
-        val content = getJson()
-        Log.d("TAG",content.parsed())
+        val content = getJson().parsed()
+        Log.d("TAG",content)
 
         return if (content == "error") catErrorUrl
-        else content.parsed()
+        else content
     }
 }
