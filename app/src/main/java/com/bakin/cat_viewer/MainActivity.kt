@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var catView: ImageView
     lateinit var getCatButton: Button
     lateinit var progressBar: ProgressBar
-    private var isImageScaled = false
+    lateinit var catScalable : SubsamplingScaleImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         catView = findViewById(R.id.image)
         getCatButton = findViewById(R.id.getCatButton)
         progressBar = findViewById(R.id.progressBar)
+        catScalable = findViewById(R.id.imageView)
 
         getCatButton.setOnClickListener {
             if (!hasInternet(this)) {
@@ -43,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         catView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            var count = -1
+            var count = 0
             override fun onLayoutChange(
                 v: View?,
                 left: Int,
@@ -55,23 +59,24 @@ class MainActivity : AppCompatActivity() {
                 oldRight: Int,
                 oldBottom: Int
             ) {
-                count++
-                println(v)
-                if (count == 0) return
-                progressBar.visibility = if (count % 2 == 1) {
-                    getCatButton.isClickable = true
-                    View.INVISIBLE
-                } else {
-                    View.VISIBLE
+                if (count == 0) {
+                    count++
+                    return
                 }
+                if (count % 2 == 1) {
+                    progressBar.visibility = View.INVISIBLE
+                    catScalable.visibility = View.VISIBLE
+                    getCatButton.isClickable = true
+
+                    val image = catView.drawable.toBitmap()
+                    catScalable.setImage(ImageSource.bitmap(image))
+                } else {
+                    progressBar.visibility = View.VISIBLE
+                    catScalable.visibility = View.INVISIBLE
+                }
+                count++
             }
         })
-
-        catView.setOnClickListener {
-            val scale = if (!isImageScaled) 1.4f else 1f
-            it.animate().scaleX(scale).scaleY(scale).duration = 500
-            isImageScaled = !isImageScaled
-        }
 
     }
 
